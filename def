@@ -1,0 +1,22 @@
+settings:
+{
+	core_script: "lgsm.py"
+	scriptpath: '/home/jballou/dev/lgsm-python/lgsm.py'
+	servicename: '/home/jballou/dev/lgsm-python/lgsm.py'
+	rootdir: '/home/jballou/dev/lgsm-python'
+	selfname: '/home/jballou/dev/lgsm-python/lgsm.py'
+	githubuser: "jaredballou"
+	githubrepo: "linuxgsm"
+	githubbranch: "master"
+	git_update: 0
+	lgsmdir: '/home/jballou/dev/lgsm-python/lgsm'
+	lgsmserverdir: $lgsmdir + "/servers/" + $selfname
+	logdir: $lgsmdir + "/servers/" + $selfname + "/log"
+	settingsdir: $lgsmserverdir + "/tmp"
+	gamedatadir: $lgsmdir + "/gamedata"
+	scriptcfgdir: $lgsmserverdir + "/cfg"
+	cachedir: $lgsmdir + "/tmp"
+	debugflag: $lgsmdir + "/.dev-debug"
+	debuglog: $lgsmdir + "/dev-debug.log"
+	lastcommit_file: $cachedir + "/lastcommit"
+}
