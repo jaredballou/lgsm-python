@@ -1,0 +1,29 @@
+avalanche:
+  include:
+    - engines/steam
+    - include/sourcetv
+    - include/tickrate
+  dependencies:
+    "libstdc++.so.6":
+      checksum: "4f9c911de2276f988afaf47659a8367f"
+  settings:
+    "engine":
+      default: "avalanche"
+    "servercfg":
+      default: "config.lua"
+      desc: "Server Config file"
+    "systemdir":
+      default: "\${filesdir}"
+    "executabledir":
+      default: "\${filesdir}"
+    "executable":
+      default: "./Jcmp-Server"
+    "servercfg":
+      default: "config.lua"
+    "servercfgdir":
+      default: "\${filesdir}"
+    "servercfgfullpath":
+      default: "\${servercfgdir}/\${servercfg}"
+    "servercfgdefault":
+      default: "\${servercfgdir}/default_config.lua"
+

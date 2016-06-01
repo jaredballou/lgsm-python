@@ -1,0 +1,46 @@
+insserver = {
+  "import": {
+    "engines/source",
+    "include/mapcyclefile",
+    "include/workshop",
+  "gamename": "Insurgency Dedicated Server",
+  "dependencies": {
+    "libc.so.6": {
+      "checksum": "c856f3fcac0a944a36e723b06bdbeb7e"
+    },
+    "libm.so.6": {
+      "checksum": "b6fef88fd045bfcd05fd4036f323855c"
+    },
+    "libpthread.so.0": {
+      "checksum": "50a2a33d3cdd82f15c3de6539db7bf60"
+    },
+    "librt.so.1": {
+      "checksum": "eabf0fc1f81292270343bd0796fc64ca"
+    },
+  "settings": {
+    "executable": {
+      "default": "./srcds_linux"
+    },
+    "appid": {
+      "default": "237410"
+    },
+    "map": {
+      "default": "ministry checkpoint"
+    },
+    "game": {
+      "default": "insurgency"
+    },
+    "gamename": {
+      "default": "Insurgency"
+    },
+    "sv_playlist": {
+      "parm": "+sv_playlist"
+      "default": "custom"
+      "desc": "Server Playlist"
+    },
+    "mapcyclefile": {
+      "parm": "+mapcyclefile"
+      "default": "mapcycle_cooperative.txt"
+    },
+  }
+}

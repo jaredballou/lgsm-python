@@ -1,0 +1,10 @@
+# Game Settings File
+# Import Engine
+  << *spark
+
+fn_set_game_setting settings "appid" "313900"
+fn_set_game_setting settings "map" "co_core"
+fn_set_game_setting settings "executable" "./ns2combatserver_linux32"
+fn_set_game_setting settings "executabledir" "\${filesdir}/ia32"
+fn_set_game_setting settings "gamename" "NS2: Combat"
+fn_set_game_setting settings "servername" "NS2C Server"

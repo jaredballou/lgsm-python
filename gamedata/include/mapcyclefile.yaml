@@ -1,0 +1,6 @@
+---
+mapcyclefile:
+  settings:
+    "mapcyclefile":
+      desc: "Map cycle file"
+      default:

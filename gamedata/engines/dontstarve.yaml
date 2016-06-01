@@ -1,0 +1,25 @@
+dontstarve
+  include:
+    - engines/steam
+  settings:
+    "engine":
+      default: "dontstarve"
+    "game"
+      default: "dontstarve"
+    "gamename"
+      default: "Don't Starve"
+    "systemdir"
+      default: "\${filesdir}"
+    "executabledir"
+      default: "\${filesdir}/bin"
+    "executable"
+      default: "./dontstarve_dedicated_server_nullrenderer"
+    "servercfg"
+      default: "settings.ini"
+    "servercfgdir"
+      default: "\${HOME}/.klei/DoNotStarveTogether"
+    "servercfgfullpath"
+      default: "\${servercfgdir}/\${servercfg}"
+    "servercfgdefault"
+      default: "\${servercfgdir}/lgsm-default.ini"
+

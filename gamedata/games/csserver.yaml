@@ -1,0 +1,14 @@
+# Game Settings File
+# Import Engine
+  << *goldsource
+
+#TODO
+# https://developer.valvesoftware.com/wiki/Command_Line_Options#Command-line_parameters_2
+fn_parms(){
+parms="-game cstrike -strictportbind +ip ${ip} -port ${port} +clientport ${clientport} +map ${map} -maxplayers ${maxplayers}"
+}
+# Steam
+fn_set_game_setting settings "appid" "90"
+fn_set_game_setting settings "map" "de_dust2"
+fn_set_game_setting settings "game" "cstrike"
+fn_set_game_setting settings "gamename" "Counter Strike"

@@ -1,0 +1,19 @@
+---
+dayofinfamy:
+  import:
+    - include/workshop
+  game: insserver
+  modname: "Day of Infamy"
+  settings:
+    subscribed_file_ids:
+      value: 
+        - 601757902
+        - 601791962
+        - 604412679
+        - 601789279
+        - 608694820
+      desc: "Subscribed Workshop Items"
+    subscribed_collection_ids:
+      value: 
+        - 604418860
+      desc: "Subscribed Workshop Collections"

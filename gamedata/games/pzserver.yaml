@@ -1,0 +1,17 @@
+# Game Settings File
+# Import Engine
+  << *projectzomboid
+
+
+fn_parms(){
+parms=""
+}
+fn_set_game_setting settings "appid" "380870"
+fn_set_game_setting settings "gamename" "Project Zomboid"
+
+fn_set_game_setting settings "systemdir" "\${filesdir}"
+fn_set_game_setting settings "executabledir" "\${filesdir}"
+fn_set_game_setting settings "executable" "./start-server.sh"
+fn_set_game_setting settings "servercfg" "servertest.ini"
+fn_set_game_setting settings "servercfgdir" "\${HOME}/Zomboid/Server"
+fn_set_game_setting settings "servercfgfullpath" "\${servercfgdir}/\${servercfg}"

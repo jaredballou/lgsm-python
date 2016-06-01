@@ -1,0 +1,10 @@
+# Game Settings File
+# Import Engine
+  << *unreal
+
+fn_parms(){
+parms="server ${map}.unr ini=${servercfgfullpath}"
+}
+fn_set_game_setting settings "gamename" "Unreal Tournament 99"
+fn_set_game_setting settings "map" "DM-Deck16]["
+

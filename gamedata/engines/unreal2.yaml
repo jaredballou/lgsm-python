@@ -1,0 +1,11 @@
+# Game Settings File
+# _unreal2
+# Unreal 2 Engine
+
+# Import default settings
+  << *steam
+  << *unreal_shared
+
+fn_parms(){
+	parms=""
+}

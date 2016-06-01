@@ -1,0 +1,10 @@
+# Game Settings File
+# Import Engine
+  << *spark
+
+fn_set_game_setting settings "appid" "4940"
+fn_set_game_setting settings "map" "ns2_summit"
+fn_set_game_setting settings "executable" "./server_linux32"
+fn_set_game_setting settings "executabledir" "${filesdir}"
+fn_set_game_setting settings "gamename" "Natural Selection 2"
+fn_set_game_setting settings "servername" "NS2 Server"

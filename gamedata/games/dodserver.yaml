@@ -1,0 +1,12 @@
+# Game Settings File
+# Import Engine
+  << *goldsource
+
+# https://developer.valvesoftware.com/wiki/Command_Line_Options#Command-line_parameters_2
+fn_parms(){
+parms="-game dod -strictportbind +ip ${ip} -port ${port} +clientport ${clientport} +map ${map} -maxplayers ${maxplayers}"
+}
+fn_set_game_setting settings "appid" "90"
+fn_set_game_setting settings "map" "dod_Anzio"
+fn_set_game_setting settings "game" "dod"
+fn_set_game_setting settings "gamename" "Day Of Defeat"

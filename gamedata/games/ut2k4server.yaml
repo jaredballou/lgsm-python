@@ -1,0 +1,12 @@
+# Game Settings File
+# Import Engine
+  << *unreal2
+
+fn_parms(){
+parms="server ${map}?game=XGame.xDeathMatch -nohomedir ini=${servercfg} log=${gamelog}"
+}
+fn_set_game_setting settings "gamename" "Unreal Tournament 2004"
+fn_set_game_setting settings "map" "DM-Rankin"
+
+# Why isn't this Default?
+fn_set_game_setting settings "servercfgdefault" "${servercfgdir}/UT2004.ini"

@@ -1,0 +1,29 @@
+---
+halflife_shared:
+  import:
+    - include/steam
+  settings:
+    "dependency_path":
+      default: "%(filesdir)s/bin"
+    "game":
+      parm: "-game"
+      default: "%(game)s"
+    "strictportbind":
+      parm: "-strictportbind"
+      default: true
+      format: noarg
+    "port":
+      parm: "-port"
+      default: "27015"
+    "maxplayers":
+      parm: "-maxplayers"
+      default: "64"
+    "clientport":
+      parm: "+clientport"
+      default: "27005"
+    "servercfgfile":
+      parm: "+servercfgfile"
+      default: "%(servercfg)s"
+    "map":
+      parm: "+map"
+      default:

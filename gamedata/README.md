@@ -11,7 +11,7 @@ The gamedata files themselves use a few simple functions to do their magic.
 ## Functions
 
 ### fn\_flush\_game\_settings()
-This function clears out all the collector files in $settingsdir (default is $\{lgsmdir\}/settings.tmp). It is run at every execution of the script right now, eventually the goal is to only regenerate these files when gamedata updates are pulled.
+This function clears out all the collector files in \$parserdir (default is $\{lgsmdir\}/settings.tmp). It is run at every execution of the script right now, eventually the goal is to only regenerate these files when gamedata updates are pulled.
 
 ### fn\_import\_game\_settings()
 
@@ -47,10 +47,10 @@ This is an example of a gamedata file for the Widgets engine. We'll call it \_wi
 
 ```bash
 # Import Steam settings
-fn_import_game_settings include/steam
+fn_import_game_settings _steam
 
 # Use + and - parameters
-fn_import_game_settings include/parms_plusminus
+fn_import_game_settings _parms_plusminus
 
 # Game Settings
 fn_set_game_setting settings "appid" "99999" "Steam App ID"
@@ -65,6 +65,7 @@ fn_set_game_setting settings "executable" "./widgets_server"
 fn_set_game_setting settings "servercfg" "\${servicename}.cfg"
 fn_set_game_setting settings "servercfgdir" "\${systemdir}/cfg"
 fn_set_game_setting settings "servercfgfullpath" "\${servercfgdir}/\${servercfg}"
+fn_set_game_setting settings "servercfgdefault" "\${servercfgdir}/lgsm-default.cfg"
 
 # Game Parameters
 fn_set_game_parm parms_minus "tickrate" "66" "Server tickrate"

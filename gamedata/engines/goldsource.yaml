@@ -1,0 +1,20 @@
+---
+goldsource:
+  import:
+    - engines/halflife_shared
+    "appid":
+      default: "90"
+    "map":
+      default: "dm_lockdown"
+    "engine":
+      default: "goldsource"
+    "executable":
+      default: "./hlds_run"
+    "ip":
+      parm: "+ip"
+      default: "\${ip}"
+    "clientport":
+      parm: "+clientport"
+      default: "\${clientport}"
+    "maxplayers":
+      parm: "-maxplayers"

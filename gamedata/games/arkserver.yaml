@@ -1,0 +1,28 @@
+arkserver:
+  import:
+    - include/steam
+    - engines/unreal4
+  parms:
+    "TheIsland?listen":
+      value: "--NOPARM--"
+  settings:
+    "appid":
+      value: "376030"
+    "game":
+      value: "ShooterGame"
+    "gamename":
+      value: "ARK: Survival Evolved"
+    "systemdir":
+      value: "%(filesdir)/%(game)"
+    "executabledir":
+      value: "%(systemdir)/Binaries/Linux"
+    "executable":
+      value: "./%(game)Server"
+    "servercfg":
+      value: "GameUserSettings.ini"
+    "servercfgdir":
+      value: "%(systemdir)/Saved/Config/LinuxServer"
+    "servercfgfullpath":
+      value: "%(servercfgdir)/%(servercfg)"
+    "servercfgdefault":
+      value: "%(servercfgdir)/lgsm-default.ini"

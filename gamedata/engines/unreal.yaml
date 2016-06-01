@@ -1,0 +1,8 @@
+# Game Settings File
+# _unreal
+# Unreal Engine
+
+# Import default settings
+  << *unreal_shared
+
+fn_set_game_setting scriptactions "mc" "map-compressor|compress_ut99_maps.sh|Map Compressor."

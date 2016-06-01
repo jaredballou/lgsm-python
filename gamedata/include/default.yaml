@@ -1,0 +1,171 @@
+---
+default:
+  settings:
+    "backupdir":
+      default: "%(lgsmdir)s/backups"
+      desc: "Backup Directory"
+    "map":
+      desc: "Default map to load"
+    "game_mod":
+      desc: "Mod to load from gamedata/mods"
+    "email":
+      default: "email@example.com"
+      desc: "Email address for notification"
+    "emailnotification":
+      default: "off"
+      desc: "Email notification (on|off)"
+    "engine":
+      desc: "Game Engine"
+    "filesdir":
+      default: "%(rootdir)s/serverfiles"
+      desc: "Server Files Directory"
+    "game":
+      desc: "Name of game"
+    "gamename":
+      desc: "Name for subdirectory in GitHub repo"
+    "ip":
+      default: "0.0.0.0"
+      desc: "IP Address to bind for server"
+    "lgsm_version":
+      default: "%(version)s"
+      desc: "Version of LGSM that created this config"
+    "lockselfname":
+      default: ".%(servicename)s.lock"
+      desc: "LGSM Lock File"
+    "logdays":
+      default: "7"
+      desc: "Number of days to retain logs"
+    "maxplayers":
+      desc: "Maximum player count"
+    "port":
+      desc: "Port to bind for server"
+    "consolelogdir":
+      default: "%(lgsmserverdir)s/log/console"
+      desc: "Console Log Dir"
+    "consolelog":
+      default: "%(consolelogdir)s/%(servicename)s-console.log"
+      desc: "Console Log"
+    "consolelogdate":
+      default: "%(consolelogdir)s/%(servicename)s-console-%(date)s.log"
+      desc: "Console Log Rotation Filename"
+    "scriptlogdir":
+      default: "%(lgsmserverdir)s/log/script"
+      desc: "Script Log Dir"
+    "scriptlog":
+      default: "%(scriptlogdir)s/%(servicename)s-script.log"
+      desc: "Script Log"
+    "scriptlogdate":
+      default: "%(scriptlogdir)s/%(servicename)s-script-%(date)s.log"
+      desc: "Script Log Rotation Filename"
+    "emaillog":
+      default: "%(scriptlogdir)s/%(servicename)s-email.log"
+      desc: "Email Log"
+    "servercfg_suffix":
+      default: ".cfg"
+      desc: "Suffix to put on the end of the server config. For file extensions, use \".ext\", setting to empty will use the bare server config name"
+    "systemdir":
+      default: "%(filesdir)s/%(game)s"
+      desc: "System Directory (root of game installation)"
+    "gamelogdir":
+      default: "%(systemdir)s/logs"
+      desc: "Game log directory"
+    "executabledir":
+      default: "%(filesdir)s"
+      desc: "Executable directory"
+    "executable":
+      desc: "Executable to invoke to start game server"
+    "servercfgdir":
+      default: "%(systemdir)s/cfg"
+      desc: "Server config directory"
+    "servercfg":
+      default: "%(servicename)s%(servercfg_suffix)s"
+      desc: "Server config file for this instance"
+    "servercfgdefault":
+      default: "%(servercfgdir)s/lgsm-default%(servercfg_suffix)s"
+      desc: "Default server configuration file"
+    "servercfgfullpath":
+      default: "%(servercfgdir)s/%(servercfg)s"
+      desc: "Full path to server config"
+    "dependency_path":
+      default: "%(filesdir)s"
+    "server_parms":
+      desc: "Additional Server command-line arguments. Put the parameters that start with \"-\" first, then \"+\" parameters after"
+  scriptactions:
+    start:
+      command: "command_start.sh"
+      desc: "Start the server"
+      aliases:
+        - st
+    stop:
+      command: "command_stop.sh"
+      desc: "Stop the server"
+      aliases:
+        - sp
+    restart:
+      command: "fn_restart"
+      desc: "Restart the server"
+      aliases:
+        - r
+    depsdetect:
+      command: "command_dev_detect_deps.sh"
+      desc: "Detect Dependencies"
+      aliases:
+        - dd
+    game-dependencies:
+      command: "fn_fix_game_dependencies"
+      desc: "Make sure that the correct libraries for this game are installed"
+      aliases:
+        - gd
+    update:
+      command: "update_check.sh"
+      desc: "Checks and applies updates from SteamCMD"
+      aliases:
+        - u
+    update-functions:
+      command: "update_functions.sh"
+      desc: "Removes all functions so latest can be downloaded"
+      aliases:
+        - uf
+    monitor:
+      command: "command_monitor.sh"
+      desc: "Checks that the server is running"
+      aliases:
+        - m
+    email-test:
+      command: "command_email_test.sh"
+      desc: "Sends test monitor email"
+      aliases:
+        - et
+    details:
+      command: "command_details.sh"
+      desc: "Displays useful infomation about the server"
+      aliases:
+        - d
+    debug:
+      command: "command_debug.sh"
+      desc: "See the output of the server directly to your terminal"
+    dev-debug:
+      command: "command_dev_debug.sh"
+      desc: "Toggle Developer Debug mode"
+      aliases:
+        - dev
+    install:
+      command: "command_install.sh"
+      desc: "Install the server"
+      aliases:
+        - i
+    auto-install:
+      command: "fn_autoinstall"
+      desc: "Install the server, without prompts"
+      aliases:
+        - ai
+    backup:
+      command: "command_backup.sh"
+      desc: "Create archive of the server"
+      aliases:
+        - b
+    install-mod:
+      command: "install_mod.sh"
+      desc: "Install mods"
+      aliases:
+        - im

@@ -1,0 +1,16 @@
+# Game Settings File
+# Import Engine
+  << *steam
+  << *unreal2
+
+fn_parms(){
+parms="server ${map}?game=KFmod.KFGameType?VACSecured=true -nohomedir ini=${servercfg} log=${gamelog}"
+
+# Start Variables for Objective mode
+#map="KFO-Steamland"
+#parms="server ${map}?Game=KFStoryGame.KFStoryGame?VACSecured=true -nohomedir ini=${servercfg} log=${gamelog}"
+}
+
+fn_set_game_setting settings "appid" "215360"
+fn_set_game_setting settings "map" "KF-BioticsLab.rom"
+fn_set_game_setting settings "gamename" "Killing Floor"
