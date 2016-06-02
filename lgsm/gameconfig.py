@@ -97,12 +97,15 @@ class GameConfig:
 	
 	def find_gamedata_file(self, file):
 		test_paths = [
-			file, 
-			"%s%s" % (file, self.gamedata_suffix), 
-			os.path.join("games", file), 
-			os.path.join("games", "%s%s" % (file, self.gamedata_suffix)), 
+			file,
+			"%s%s" % (file, self.gamedata_suffix),
+			"%s/gamedata%s" % (file, self.gamedata_suffix),
+			os.path.join("games", file),
+			os.path.join("games", "%s%s" % (file, self.gamedata_suffix)),
+			os.path.join("games", "%s/gamedata%s" % (file, self.gamedata_suffix)),
 			os.path.join("games", os.path.basename(file)),
 			os.path.join("games", "%s%s" % (os.path.basename(file), self.gamedata_suffix)),
+			os.path.join("games", "%s/gamedata%s" % (os.path.basename(file), self.gamedata_suffix)),
 		]
 		test_prefixes = [
 			".",
@@ -138,7 +141,7 @@ class GameConfig:
 		if default_cfg_file is not None:
 			logging.debug(default_cfg_file)
 			dict_merge(self.config, self.load_gamedata_file(default_cfg_file))
-		self.config = self.generate_config()
+		self.config = self.merge_settings_to_config()
 
 	def load_gamedata_file(self, file):
 		bn = os.path.basename(file).split('.')[0]
@@ -169,7 +172,7 @@ class GameConfig:
 					dict_merge(data, impdata)
 		return data
 
-	def generate_config(self,data=None):
+	def merge_settings_to_config(self,data=None):
 		if data is None:
 			data = self.config
 		if not "config" in data.keys():
@@ -196,14 +199,11 @@ class GameConfig:
 			conf = self.config
 		for key in conf.keys():
 			kt = type(conf[key])
-			if kt in [str, int]:
-				print "%s%s: %s" % (path, key, self.getval(key,conf))
-			if kt in [list]:
-				print "%s%s: [%s]" % (path, key, ', '.join(map(str, conf[key])))
-			if kt in [set,tuple]:
-				print "%s%s: [%s]" % (path, key, conf[key].join(", "))
+			if kt in [str, int, list, set, tuple]:
+				print "%s%s: %s" % (path, key, val) 
+			val = self.getval(key=key,dict=conf)
 			if kt in [OrderedDict, dict]:
-				self.print_config("%s%s/" % (path, key), conf[key])
+				self.print_config(path="%s%s/" % (path, key), conf=conf[key])
 
 	def getval(self, key, dict=None):
 		val = ""
@@ -211,7 +211,18 @@ class GameConfig:
 			dict = self.config['config']
 		if not key in dict.keys():
 			return
-		val = dict[key]
+		kt = type(dict[key])
+		if kt in [str, int]:
+			val = dict[key]
+		if kt in [list]:
+			val = ', '.join(map(str, dict[key])))
+		if kt in [set,tuple]:
+			val = dict[key].join(", ")
+		if kt in [OrderedDict, dict]:
+			vals = OrderedDict()
+			for skey in dict[key].keys():
+				vals[key] = self.getval(key=skey,dict=dict[key])
+			return vals
 		try:
 			while (val.find('%') != -1):
 				val = (val) % dict

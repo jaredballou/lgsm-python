@@ -1,0 +1,15 @@
+settings:
+  modname: Day of Infamy
+  subscribed_file_ids:
+    - 601757902
+    - 601791962
+    - 604412679
+    - 601789279
+    - 608694820
+  subscribed_collection_ids:
+    - 604418860
+
+#fn_set_game_parm parms_plus "workshop_start_map" "--EMPTY--" "Workshop map to start with"
+#fn_set_game_parm parms_plus "host_workshop_collection" "--EMPTY--" "604418860" "Subscribed Workshop Collections"
+#fn_set_game_parm parms_plus "sv_workshop_list_file" "\${systemdir}/subscribed_file_ids.txt" "Path to Subscribed Workshop Items file"
+#fn_set_game_parm parms_minus "workshop" " " "Enable Workshop Support"
