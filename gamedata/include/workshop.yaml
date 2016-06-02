@@ -14,6 +14,7 @@ workshop:
     "workshop_start_map":
       parm: "+workshop_start_map"
       desc: "Workshop Start Map"
+      default: ""
     "sv_workshop_enabled":
       parm: "+sv_workshop_enabled"
       desc: "Workshop Enabled"

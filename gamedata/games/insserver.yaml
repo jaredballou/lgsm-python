@@ -4,7 +4,6 @@ insserver:
     - engines/source
     - include/mapcyclefile
     - include/workshop
-  gamename: "Insurgency Dedicated Server"
   dependencies:
     "libc.so.6":
       checksum: "c856f3fcac0a944a36e723b06bdbeb7e"

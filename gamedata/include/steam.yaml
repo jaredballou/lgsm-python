@@ -15,7 +15,7 @@ steam:
       desc: "Update game on start"
     "beta":
       parm: "-beta"
-      default: 
+      default: ""
       desc: "Beta branch to use. Leave empty for stable branch"
   scriptactions:
     force-update:
