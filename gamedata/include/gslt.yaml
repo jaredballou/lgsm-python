@@ -1,7 +1,0 @@
----
-gslt:
-  settings:
-    "sv_setsteamaccount":
-      parm: "+sv_setsteamaccount"
-      desc: "Steam Account for GSLT"
-      default: 
