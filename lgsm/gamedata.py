@@ -18,18 +18,58 @@ except ImportError:
 	# requires a: `pip-2.6 install ordereddict`
 	from ordereddict import OrderedDict
 
-class GameConfig(object):
-	def __init__(self, parent):
+class GameData(object):
+	def __init__(self, parent, gamedata_prefix = 'gamedata/', gamedata_suffix = '.yaml'):
 		self.__parent__ = parent
+		self.gamedata_prefix = gamedata_prefix
+		self.gamedata_suffix = gamedata_suffix
 		self.config = parent.config
-		self.gameconfig_load()
+		self.gamedata_load()
+	
+	def gamedata_find_file(self, file):
+		conf = self.__parent__.config['config']
+		test_paths = [
+			"%s%s" % (file, self.gamedata_suffix),
+			"%s/gamedata%s" % (file, self.gamedata_suffix),
+			os.path.join("games", "%s%s" % (file, self.gamedata_suffix)),
+			os.path.join("games", "%s/gamedata%s" % (file, self.gamedata_suffix)),
+			os.path.join("games", "%s%s" % (os.path.basename(file), self.gamedata_suffix)),
+			os.path.join("games", "%s/gamedata%s" % (os.path.basename(file), self.gamedata_suffix)),
+			file,
+			os.path.join("games", file),
+			os.path.join("games", os.path.basename(file)),
+		]
+		test_prefixes = [
+			self.gamedata_prefix,
+			self.getval(key='gamedatadir',dict=conf),
+			self.getval(key='lgsmdir',dict=conf),
+			self.getval(key='rootdir',dict=conf),
+			os.path.join(self.getval(key='rootdir',dict=conf),self.gamedata_prefix),
+		]
+		for tprefix in test_prefixes:
+			for tpath in test_paths:
+				tf = os.path.join(tprefix, tpath)
+				#pprint("searching for %s" % tf)
+				if os.path.isfile(tf):
+					logging.debug("gamedata_find_file %s returned %s" % (file, tf))
+					return tf
 
-	def gameconfig_load(self):
+	def gamedata_load(self):
+		# Load gamedata file for my game
+		#pprint(self.__parent__.game)
+		dict_merge(self.config, self.gamedata_load_file(self.__parent__.game))
+		# If there is a config.yaml file with user settings, load that over the defaults
+		default_cfg_file = self.gamedata_find_file('config.yaml')
+		if default_cfg_file is not None:
+			logging.debug(default_cfg_file)
+			dict_merge(self.config, self.gamedata_load_file(default_cfg_file))
+		self.gamedata_merge_settings_to_config()
 
-	def gameconfig_load_file(self, file):
+
+	def gamedata_load_file(self, file):
 		bn = os.path.basename(file).split('.')[0]
 		# Find the YAML file, bail if we cannot locate it
-		yaml_file = self.gameconfig_find_file(file)
+		yaml_file = self.gamedata_find_file(file)
 		if yaml_file == None:
 			return
 		logging.debug("yaml_file %s is %s" % (file, yaml_file))
@@ -46,7 +86,7 @@ class GameConfig(object):
 		# Handle importing files
 		if "import" in data.keys():
 			for impfile in data["import"]:
-				impdata = self.gameconfig_load_file(impfile)
+				impdata = self.gamedata_load_file(impfile)
 				if len(impdata.keys()) > 0:
 					logging.debug("merging %s" % impfile)
 					logging.debug(impdata)
@@ -55,7 +95,7 @@ class GameConfig(object):
 					dict_merge(data, impdata)
 		return data
 
-	def gameconfig_merge_settings_to_config(self):
+	def gamedata_merge_settings_to_config(self):
 		if not "config" in self.config.keys():
 			self.config["config"] = dict()
 		# this is me doing something stupid so I can interpolate the config

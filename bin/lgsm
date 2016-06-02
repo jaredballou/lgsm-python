@@ -2,15 +2,15 @@
 
 import sys, os
 from pprint import pprint
-apath = os.path.abspath(os.path.realpath(os.path.dirname(__file__) + '/..'))
+apath = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 sys.path.insert(0, apath)
-print apath
+#print apath
 
 import lgsm
 
-conf = lgsm.GameConfig('insserver')
-print "config"
-pprint(conf.config)
-print "dump config"
-print conf.dump_config()
-print "done"
+core = lgsm.LGSM()
+#print "config"
+#pprint(conf.config)
+#print "dump config"
+#print conf.dump_config()
+#print "done"
