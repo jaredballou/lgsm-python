@@ -1,0 +1,3 @@
+[submodule "gamedata"]
+	path = gamedata
+	url = git@github.com:jaredballou/lgsm-gamedata.git

@@ -9,8 +9,8 @@ sys.path.insert(0, apath)
 import lgsm
 
 core = lgsm.LGSM()
-#print "config"
-#pprint(conf.config)
-#print "dump config"
-#print conf.dump_config()
-#print "done"
+print "config"
+pprint(core.config)
+print "dump config"
+print core.gamedata.dump_config()
+print "done"

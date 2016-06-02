@@ -4,23 +4,26 @@ from pprint import pprint
 
 default_config = {
 	"config": {
-		"cachedir": "%(lgsmdir)s/tmp",
-		"core_script": "lgsm",
+		"lgsm_script": "lgsm",
 		"date": datetime.datetime.today().strftime("%Y-%m-%d-%H-%M-%S"),
-		"gamedatadir": "%(lgsmdir)s/gamedata",
-		"git_update": False,
-		"githubbranch": "master",
-		"githubrepo": "lgsm-python",
-		"githubuser": "jaredballou",
-		"lgsmdir": "%(rootdir)s/lgsm",
-		"lgsmserverdir": "%(lgsmdir)s/servers/%(selfname)s",
-		"logdir": "%(lgsmdir)s/servers/%(selfname)s/log",
-		"parserdir": "%(lgsmserverdir)s/tmp",
-		"rootdir": os.path.realpath(os.path.dirname(main.__file__)),
-		"scriptcfgdir": "%(lgsmserverdir)s/cfg",
-		"scriptpath": os.path.realpath(main.__file__),
-		"selfname": os.path.basename(os.path.realpath(main.__file__)),
-		"servicename": os.path.basename(main.__file__),
+		"gamedata_dir": "%(lgsm_dir)s/gamedata",
+		"gamedata_repo": "lgsm-gamedata",
+		"gamedata_user": "%(github_user)s",
+		"gamedata_branch": "%(github_branch)s",
+		"github_update": True,
+		"github_user": "jaredballou",
+		"github_branch": "master",
+		"lgsm_branch": "%(github_branch)s",
+		"lgsm_repo": "lgsm-python",
+		"lgsm_user": "%(github_user)s",
+		"lgsm_dir": "%(root_dir)s/lgsm",
+		"root_dir": os.path.realpath(os.path.dirname(main.__file__)),
+		"game_script_cfg_dir": "%(game_script_dir)s/cfg",
+		"game_script_path": os.path.realpath(main.__file__),
+		"game_script_name": os.path.basename(os.path.realpath(main.__file__)),
+		"game_script_dir": "%(lgsm_dir)s/games/%(game_script_name)s",
+		"log_dir": "%(game_script_dir)s/log",
+		"instance_name": os.path.basename(main.__file__),
 	}
 }
 
@@ -49,7 +52,7 @@ class LGSM(object):
 	#def gameserver_create_config(self,name,data):
 
 	def set_game(self, game):
-		if game == default_config['config']['core_script']:
+		if game == default_config['config']['lgsm_script']:
 			self.installer_run()
 		elif game == 'insserver':
 			self.game = game

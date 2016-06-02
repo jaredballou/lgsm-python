@@ -8,23 +8,23 @@ import os
 class Gamedata(object):
 	default_config = {
 		"config": {
-			"cachedir": "%(lgsmdir)s/tmp", 
-			"core_script": "lgsm.py", 
+			"cachedir": "%(lgsm_dir)s/tmp", 
+			"lgsm_script": "lgsm.py", 
 			"date": datetime.datetime.today().strftime("%Y-%m-%d-%H-%M-%S"), 
-			"gamedatadir": "%(lgsmdir)s/gamedata", 
+			"gamedata_dir": "%(lgsm_dir)s/gamedata", 
 			"git_update": False, 
-			"githubbranch": "master", 
-			"githubrepo": "lgsm-python", 
-			"githubuser": "jaredballou", 
-			"lgsmdir": "%(rootdir)s/lgsm", 
-			"lgsmserverdir": "%(lgsmdir)s/servers/%(selfname)s", 
-			"logdir": "%(lgsmdir)s/servers/%(selfname)s/log", 
-			"parserdir": "%(lgsmserverdir)s/tmp", 
-			"rootdir": os.path.dirname(os.path.realpath(__file__)), 
-			"scriptcfgdir": "%(lgsmserverdir)s/cfg", 
-			"scriptpath": os.path.realpath(__file__), 
-			"selfname": os.path.basename(os.path.realpath(__file__)), 
-			"servicename": os.path.basename(__file__), 
+			"github_branch": "master", 
+			"lgsm_repo": "lgsm-python", 
+			"github_user": "jaredballou", 
+			"lgsm_dir": "%(root_dir)s/lgsm", 
+			"game_script_dir": "%(lgsm_dir)s/servers/%(game_script_name)s", 
+			"log_dir": "%(lgsm_dir)s/servers/%(game_script_name)s/log", 
+			"parserdir": "%(game_script_dir)s/tmp", 
+			"root_dir": os.path.dirname(os.path.realpath(__file__)), 
+			"game_script_cfg_dir": "%(game_script_dir)s/cfg", 
+			"game_script_path": os.path.realpath(__file__), 
+			"game_script_name": os.path.basename(os.path.realpath(__file__)), 
+			"instance_name": os.path.basename(__file__), 
 		}
 	}
 	def dict_merge(self,dct, merge_dct):

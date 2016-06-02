@@ -41,10 +41,10 @@ class GameData(object):
 		]
 		test_prefixes = [
 			self.gamedata_prefix,
-			self.getval(key='gamedatadir',dict=conf),
-			self.getval(key='lgsmdir',dict=conf),
-			self.getval(key='rootdir',dict=conf),
-			os.path.join(self.getval(key='rootdir',dict=conf),self.gamedata_prefix),
+			self.getval(key='gamedata_dir',dict=conf),
+			self.getval(key='lgsm_dir',dict=conf),
+			self.getval(key='root_dir',dict=conf),
+			os.path.join(self.getval(key='root_dir',dict=conf),self.gamedata_prefix),
 		]
 		for tprefix in test_prefixes:
 			for tpath in test_paths:
