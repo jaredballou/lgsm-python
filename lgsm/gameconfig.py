@@ -10,7 +10,7 @@ import __main__ as main
 #logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
 #import inspect
-from pprint import pprint
+#from pprint import pprint
 try:
 	from collections import OrderedDict
 except ImportError:
@@ -19,62 +19,53 @@ except ImportError:
 	from ordereddict import OrderedDict
 
 class GameConfig(object):
-	def __init__(self, parent):
-		self.__parent__ = parent
-		self.config = parent.config
+	def __init__(self, parent=None, game=None, game_instance=None):
+		if not parent is None:
+			self.__parent__ = parent
+			self.config = parent.config
+			self.gamedata = parent.gamedata
+			self.game = parent.game
+		if not game is None:
+			self.game = game
+		if game_instance is None:
+			self.game_instance = self.game
+		else:
+			self.game_instance = game_instance
 		self.gameconfig_load()
 
-	def gameconfig_load(self):
+	def gameconfig_load(self,game=None,game_instance=None):
+		if game is None:
+			game = self.game
+		if game_instance is None:
+			game_instance = self.game_instance
+		print self.config
+		print self.game
+		print self.game_instance
 
-	def gameconfig_load_file(self, file):
-		bn = os.path.basename(file).split('.')[0]
-		# Find the YAML file, bail if we cannot locate it
-		yaml_file = self.gameconfig_find_file(file)
-		if yaml_file == None:
-			return
-		logging.debug("yaml_file %s is %s" % (file, yaml_file))
-		with open(yaml_file, 'r') as ymlfile:
-			conf = yaml.load(ymlfile)
-		# Create an empty OrderedDict
-		data = OrderedDict()
-		# If the only key is eponymous, use that as the new root
-		if len(conf.keys()) == 1 and conf.keys()[0] == bn:
-			conf = conf[conf.keys()[0]]
-		# Merge new data into our OrderedDict
-		logging.debug("starting dict_merge(data, conf)")
-		dict_merge(data, conf)
-		# Handle importing files
-		if "import" in data.keys():
-			for impfile in data["import"]:
-				impdata = self.gameconfig_load_file(impfile)
-				if len(impdata.keys()) > 0:
-					logging.debug("merging %s" % impfile)
-					logging.debug(impdata)
-					logging.debug(data)
-					dict_merge(impdata, data)
-					dict_merge(data, impdata)
-		return data
-
-	def gameconfig_merge_settings_to_config(self):
-		if not "config" in self.config.keys():
-			self.config["config"] = dict()
+	def gameconfig_merge_settings_to_config(self,game=None,gamedata=None,game_instance=None):
+		if game is None:
+			game = self.game
+		if game_instance is None:
+			game_instance = self.game_instance
+		if gamedata is None:
+			gamedata = self.gamedata
 		# this is me doing something stupid so I can interpolate the config
-		if ("settings" in self.config.keys()):
-			for setting in self.config["settings"].keys():
-				if "default" in self.config["settings"][setting].keys():
-					self.config["config"][setting] = self.config["settings"][setting]["default"]
+		if ("settings" in self.gamedata.keys()):
+			for setting in self.gamedata["settings"].keys():
+				if "default" in self.gamedata["settings"][setting].keys():
+					self.config[setting] = self.gamedata["settings"][setting]["default"]
 				else:
-					self.config["config"][setting] = ""
+					self.config[setting] = ""
 
-	def dump_config(self, format='yaml'):
+	def config_dump(self, format='yaml'):
 		print "Dumping config as %s" % format
 		if format == 'yaml':
 			return yaml.dump(self.config, indent=4, width=120, default_flow_style=False)
 		if format == 'json':
 			return json.dumps(self.config, indent=4, sort_keys=True)
-		return self.print_config()
+		return self.config_print()
 
-	def print_config(self, path='', conf=None):
+	def config_print(self, path='', conf=None):
 		if conf is None:
 			conf = self.config
 		for key in conf.keys():
@@ -83,7 +74,7 @@ class GameConfig(object):
 				print "%s%s: %s" % (path, key, val) 
 			val = self.getval(key=key,dict=conf)
 			if kt in [OrderedDict, dict]:
-				self.print_config(path="%s%s/" % (path, key), conf=conf[key])
+				self.config_print(path="%s%s/" % (path, key), conf=conf[key])
 
 	def getval(self, key, dict=None):
 		val = ""

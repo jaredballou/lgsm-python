@@ -7,10 +7,20 @@ sys.path.insert(0, apath)
 #print apath
 
 import lgsm
+from lgsm.steam import Steam
 
-core = lgsm.LGSM()
-print "config"
-pprint(core.config)
-print "dump config"
-print core.gamedata.dump_config()
-print "done"
+def do_steam(steamcmd_path="/home/jballou/games/steamcmd",steam_path="/home/jballou/games/serverfiles",appid=237410):
+	steam = Steam(steamcmd_path=steamcmd_path,steam_path=steam_path,appid=appid)
+	steam.app_install(appid=appid)
+
+def do_lgsm(steamcmd_path="/home/jballou/games/steamcmd",appid=237410):
+	core = lgsm.LGSM()
+	print "config"
+	pprint(core.config)
+	print "dump config"
+	print core.gamedata.gamedata_dump()
+	print "done"
+
+if __name__ == '__main__':
+	do_lgsm()
+	do_steam()

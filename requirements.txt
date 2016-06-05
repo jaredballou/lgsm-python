@@ -7,3 +7,7 @@ datetime
 #collections
 #ordereddict
 menu
+importlib
+gitpython
+urllib
+urllib2

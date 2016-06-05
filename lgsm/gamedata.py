@@ -10,7 +10,7 @@ import __main__ as main
 #logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
 #import inspect
-from pprint import pprint
+#from pprint import pprint
 try:
 	from collections import OrderedDict
 except ImportError:
@@ -19,15 +19,24 @@ except ImportError:
 	from ordereddict import OrderedDict
 
 class GameData(object):
-	def __init__(self, parent, gamedata_prefix = 'gamedata/', gamedata_suffix = '.yaml'):
+	def __init__(self, parent, gamedata_prefix = 'gamedata/', gamedata_suffix = '.yaml', game = None):
 		self.__parent__ = parent
 		self.gamedata_prefix = gamedata_prefix
 		self.gamedata_suffix = gamedata_suffix
 		self.config = parent.config
+		if not game is None:
+			self.game = game
+		else:
+			self.game = parent.game
 		self.gamedata_load()
 	
+	def gamedata_load(self):
+		# Load gamedata file for my game
+		#pprint(self.__parent__.game)
+		self.gamedata = self.gamedata_load_file(self.game)
+
 	def gamedata_find_file(self, file):
-		conf = self.__parent__.config['config']
+		conf = self.config
 		test_paths = [
 			"%s%s" % (file, self.gamedata_suffix),
 			"%s/gamedata%s" % (file, self.gamedata_suffix),
@@ -41,10 +50,10 @@ class GameData(object):
 		]
 		test_prefixes = [
 			self.gamedata_prefix,
-			self.getval(key='gamedata_dir',dict=conf),
-			self.getval(key='lgsm_dir',dict=conf),
-			self.getval(key='root_dir',dict=conf),
-			os.path.join(self.getval(key='root_dir',dict=conf),self.gamedata_prefix),
+			self.gamedata_interpolate_value(key='gamedata_dir',dict=conf),
+			self.gamedata_interpolate_value(key='lgsm_dir',dict=conf),
+			self.gamedata_interpolate_value(key='root_dir',dict=conf),
+			os.path.join(self.gamedata_interpolate_value(key='root_dir',dict=conf),self.gamedata_prefix),
 		]
 		for tprefix in test_prefixes:
 			for tpath in test_paths:
@@ -53,18 +62,6 @@ class GameData(object):
 				if os.path.isfile(tf):
 					logging.debug("gamedata_find_file %s returned %s" % (file, tf))
 					return tf
-
-	def gamedata_load(self):
-		# Load gamedata file for my game
-		#pprint(self.__parent__.game)
-		dict_merge(self.config, self.gamedata_load_file(self.__parent__.game))
-		# If there is a config.yaml file with user settings, load that over the defaults
-		default_cfg_file = self.gamedata_find_file('config.yaml')
-		if default_cfg_file is not None:
-			logging.debug(default_cfg_file)
-			dict_merge(self.config, self.gamedata_load_file(default_cfg_file))
-		self.gamedata_merge_settings_to_config()
-
 
 	def gamedata_load_file(self, file):
 		bn = os.path.basename(file).split('.')[0]
@@ -95,40 +92,40 @@ class GameData(object):
 					dict_merge(data, impdata)
 		return data
 
-	def gamedata_merge_settings_to_config(self):
-		if not "config" in self.config.keys():
-			self.config["config"] = dict()
+	def gamedata_merge_settings_to_config(self,config=None):
+		if config is None:
+			config = self.config
 		# this is me doing something stupid so I can interpolate the config
-		if ("settings" in self.config.keys()):
-			for setting in self.config["settings"].keys():
-				if "default" in self.config["settings"][setting].keys():
-					self.config["config"][setting] = self.config["settings"][setting]["default"]
+		if ("settings" in self.gamedata.keys()):
+			for setting in self.gamedata["settings"].keys():
+				if "default" in self.gamedata["settings"][setting].keys():
+					self.config[setting] = self.gamedata["settings"][setting]["default"]
 				else:
-					self.config["config"][setting] = ""
+					self.config[setting] = ""
 
-	def dump_config(self, format='yaml'):
+	def gamedata_dump(self, format='yaml'):
 		print "Dumping config as %s" % format
 		if format == 'yaml':
-			return yaml.dump(self.config, indent=4, width=120, default_flow_style=False)
+			return yaml.dump(self.gamedata, indent=4, width=120, default_flow_style=False)
 		if format == 'json':
-			return json.dumps(self.config, indent=4, sort_keys=True)
-		return self.print_config()
+			return json.dumps(self.gamedata, indent=4, sort_keys=True)
+		return self.gamedata_print()
 
-	def print_config(self, path='', conf=None):
-		if conf is None:
-			conf = self.config
-		for key in conf.keys():
-			kt = type(conf[key])
+	def gamedata_print(self, path='', gamedata=None):
+		if gamedata is None:
+			gamedata = self.gamedata
+		for key in gamedata.keys():
+			kt = type(gamedata[key])
 			if kt in [str, int, list, set, tuple]:
 				print "%s%s: %s" % (path, key, val) 
-			val = self.getval(key=key,dict=conf)
+			val = self.gamedata_interpolate_value(key=key,dict=gamedata)
 			if kt in [OrderedDict, dict]:
-				self.print_config(path="%s%s/" % (path, key), conf=conf[key])
+				self.gamedata_print(path="%s%s/" % (path, key), gamedata=gamedata[key])
 
-	def getval(self, key, dict=None):
+	def gamedata_interpolate_value(self, key, dict=None):
 		val = ""
 		if dict is None:
-			dict = self.config['config']
+			dict = self.gamedata['config']
 		if not key in dict.keys():
 			return
 		kt = type(dict[key])
@@ -141,7 +138,7 @@ class GameData(object):
 		if kt in [OrderedDict, dict]:
 			vals = OrderedDict()
 			for skey in dict[key].keys():
-				vals[key] = self.getval(key=skey,dict=dict[key])
+				vals[key] = self.gamedata_interpolate_value(key=skey,dict=dict[key])
 			return vals
 		try:
 			while (val.find('%') != -1):
