@@ -2,6 +2,8 @@
 
 This is my work in progress of building the core of a new Linux Game Server Manager in Python. It is being done from scratch to try to redo some of the things I dislike about the original. Some key features I am looking to implement:
 
+* [ ] GitHub repos to source the gamedata and modules and be updated via pull.
+* [ ] Break out major functions into separate modules
 * [ ] Simple installer that users can operate via menu to handle installation of the script itself and its prereqs.
 * [ ] Module-based implementation of features and game support libraries. Still not sure how this should look, because I am a noob at Python.
 * [ ] Gamedata structure that allows inheritance and overriding of most aspects of the program, to support as many applications as possible with minimal duplication.

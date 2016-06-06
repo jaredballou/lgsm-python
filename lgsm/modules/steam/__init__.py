@@ -1,6 +1,6 @@
 import urllib2
 import os
-from .download import *
+from lgsmcore.download import *
 import tarfile
 import zipfile
 import subprocess
@@ -15,12 +15,14 @@ class Steam(object):
 		"+login": "anonymous",
 	}
 
-	def __init__(self, steamcmd_path=None, steamcmd_url=None, steam_path=None, appid=None,steamcmd_options=None):
+	def __init__(self, steamcmd_path=None, steamcmd_url=None, parent=None, steam_path=None, appid=None, steamcmd_options=None):
 		"""
 		steamcmd_install(steamcmd_path=None)
 	
 		Grabs the correct build of steamcmd for the platform and unzips it
 		"""
+		if not parent is None:
+			self.__parent__ = parent
 		if not steamcmd_path is None:
 			self.steamcmd_path = steamcmd_path
 		if not steamcmd_url is None:

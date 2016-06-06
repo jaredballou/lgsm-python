@@ -2,25 +2,37 @@
 
 import sys, os
 from pprint import pprint
-apath = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
-sys.path.insert(0, apath)
+apath = os.path.dirname(os.path.realpath(__file__))
+for spath in ("modules","lgsm","lgsm/modules"):
+	sp = os.path.join(apath,spath)
+	sys.path.insert(0, sp)
 #print apath
 
-import lgsm
-from lgsm.steam import Steam
+from lgsmcore import *
+#from steam import Steam
 
-def do_steam(steamcmd_path="/home/jballou/games/steamcmd",steam_path="/home/jballou/games/serverfiles",appid=237410):
-	steam = Steam(steamcmd_path=steamcmd_path,steam_path=steam_path,appid=appid)
-	steam.app_install(appid=appid)
+#def do_steam(steamcmd_path="/home/jballou/games/steamcmd",steam_path="/home/jballou/games/serverfiles",appid=237410):
+#	steam = Steam(steamcmd_path=steamcmd_path,steam_path=steam_path,appid=appid)
+#	steam.app_install(appid=appid)
 
 def do_lgsm(steamcmd_path="/home/jballou/games/steamcmd",appid=237410):
-	core = lgsm.LGSM()
-	print "config"
+	core = LGSMCore()
+	print "final config"
+	ic = core.interpolate(data=core.config)
+#core.interpolate_config()
+	pprint(ic)
+#	print "config"
+#	pprint(core.config)
+#	print "gamedata"
+#	print core.dump(data=core.gamedata.gamedata,format='tree')
+#	print "scriptconfig"
+#	print core.dump(data=core.scriptconfig.config, format='tree')
+#	print "merge configs"
+#	pprint(core.merge_gamedata_to_config())
+	print "merged config"
 	pprint(core.config)
-	print "dump config"
-	print core.gamedata.gamedata_dump()
 	print "done"
 
 if __name__ == '__main__':
 	do_lgsm()
-	do_steam()
+#	do_steam()

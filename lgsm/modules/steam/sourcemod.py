@@ -1,4 +1,5 @@
 import os
+
 class SourceMod(object):
 	def get_url(plugin):
 		"""

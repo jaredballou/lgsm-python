@@ -1,2 +1,3 @@
 *.pyc
 insserver
+lgsm/gamedata/*
