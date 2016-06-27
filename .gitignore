@@ -1,3 +1,6 @@
 *.pyc
 insserver
 lgsm/gamedata/*
+build/*
+dist/*
+*.egg-info/*
