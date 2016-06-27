@@ -2,11 +2,16 @@
 
 import sys, os
 from pprint import pprint
-apath = os.path.dirname(os.path.realpath(__file__))
-for spath in ("modules","lgsm","lgsm/modules"):
-	sp = os.path.join(apath,spath)
-	sys.path.insert(0, sp)
-#print apath
+from glob import glob
+test_roots = set([os.path.dirname(os.path.realpath(__file__)),os.getcwd()])
+test_dirs = set([".local/lib/python*/site-packages", "lgsm/modules"])
+print test_roots
+print test_dirs
+for root in test_roots:
+	for dir in test_dirs:
+		for sp in glob(os.path.join(root,dir)):
+			#print(sp)
+			sys.path.insert(0, sp)
 
 from lgsmcore import *
 #from steam import Steam
