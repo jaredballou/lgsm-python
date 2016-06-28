@@ -15,8 +15,11 @@ from lgsm.utils.version import get_version
 from lgsm.default_config import get_default_config
 
 class LGSM(object):
-	config = get_default_config()
-	def __init__(self, game=None, config_file = None, argv=None):
+	def __init__(self, game=None, config_file = None, argv=None, create_configs=True, force_install=False, game_instance=None):
+		self.game = game
+		self.game_instance = game_instance
+		self.config = get_default_config()
+		self.create_configs = create_configs
 		for cp in ["root_dir", "lgsm_dir"]:
 			cf = os.path.join(self.interpolate(key=cp),'config.yaml')
 			if os.path.exists(cf):
@@ -25,16 +28,15 @@ class LGSM(object):
 		self.parser = argparse.ArgumentParser(description='Install, update, and manage game servers.')
 		self.argv = argv or sys.argv[:]
 		self.prog_name = os.path.basename(self.argv[0])
-		if not game is None:
-			self.game = game
+		self.set_game(game=game,game_instance=game_instance,create_configs=False)
 		if not config_file is None:
 			self.config_file = config_file
 		self.parse_arguments()
-		self.load_config()
-		if self.interpolate(key="script_game") == "lgsm-core" or __name__ == "__main__":
+		if force_install is True or self.interpolate(key="script_game") == "lgsm-core" or __name__ == "__main__":
 			self.installer = Installer(core=self, game=game)
 		else:
-			self.set_game(game)
+			self.load_config()
+			self.set_game(game=game,game_instance=game_instance)
 
 	def execute_from_command_line(self):
 		pass
@@ -45,23 +47,40 @@ class LGSM(object):
 				script_config = yaml.load(ymlfile)
 			dict_merge(target=self.config, source=script_config)
 
-	def set_game(self, game=None, game_instance=None):
-		if game_instance is None:
-			game_instance = self.interpolate(key="game_instance")
+	def set_game(self, game=None, game_instance=None,create_configs=True):
 		if game is None:
-			game = self.interpolate(key="game_script_name")
+			self.game = self.interpolate(key="script_game")
 		else:
 			self.game = game
+
+		if game_instance is None and self.game_instance is None:
+			self.game_instance = self.game
+		else:
 			self.game_instance = game_instance
-			self.gamedata = GameData(core=self, game=game)
-		        self.scriptconfig = ScriptConfig(core=self, game=game, game_instance=game_instance)
+		self.set_config(key="script_game", value=self.game)
+		self.set_config(key="script_instance", value=self.game_instance)
+		self.gamedata = GameData(core=self, game=game)
+	        self.scriptconfig = ScriptConfig(core=self, game=game, game_instance=game_instance, create_configs=create_configs)
+
+	def set_config(self, key=None, config=None, value=None):
+		if config is None:
+			config = self.config
+		config[key] = value
+
+	def get_config(self, key=None, config=None, default=None):
+		if config is None:
+			config = self.data
+		if key in config.keys():
+			return interpolate(key=key, data=config)
+		else:
+			return default
 
 	def interpolate(self, key=None, data=None, interpolate_data=None):
 		val = ""
 		if data is None:
 			data = self.config
 		if interpolate_data is None:
-			interpolate_data = self.config
+			interpolate_data = data
 
 		if key is None:
 			item = data

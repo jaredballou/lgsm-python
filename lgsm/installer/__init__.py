@@ -1,48 +1,36 @@
 import os
 import sys
 import __main__ as main
-from lgsm.utils import dict_merge
 # as dict_merge
 from pprint import pprint
-
-from simplemenus import IdentifierMenu
-import menu
+from lgsm.gamedata import *
+from lgsm.menu import *
+from lgsm.utils import dict_merge
 
 class Installer(object):
 	def __init__(self, core, game=None):
 		self.core = core
 		if game is None:
-			if not self.select_game():
-				print "ERROR: FAILURE"
+			game = self.select_game()
+			if not game:
+				print "ERROR: No game selected!"
 				return
-		else:
-			self.game = game
+		self.game = game
 		self.installer_run()
 
 	def select_game(self):
-		games = os.listdir(os.path.join(self.core.interpolate("gamedata_dir"),"game"))
-		if not games is None:
-			#menu = IdentifierMenu(options=games)
-			#menu.get_response()
-			mainMenu = menu.Menu("Select Game",update=updateFunction)
-			mainMenu.submenu = menu.Menu("Submenu",update=updateFunction)
-			options = [{"name":"firstOption","function":firstFunc},
-				{"name":"secondOption","function":secondFunc},
-				{"name":"thirdOption","function":thirdFunc}]
-			mainMenu.addOptions(options)
-			mainMenu.open()
-		return False
+		games = OrderedDict()
+		for game in sorted(os.listdir(os.path.join(self.core.interpolate("gamedata_dir"),"game"))):
+			self.core.set_game(game=game,create_configs=False)
+			gamename = self.core.interpolate(key="gamename")
+			if gamename is None or gamename == '' or gamename in games.keys():
+				gamename = game
+			games[gamename] = game
+		menu = Menu(menudata=games)
+		result = menu.get_selection()
+		return result
 
 	def installer_run(self):
-		print "Installer"
-		print self.game
-def updateFunction(data):
-	print "update"
-#	pprint(data)
-#	return True
-def firstFunc():
-	print "firstFunc"
-def secondFunc():
-	print "secondFunc"
-def thirdFunc():
-	print "thirdFunc"
+		self.core.set_game(game=self.game,create_configs=True)
+		print self.core.interpolate(key="appid")
+

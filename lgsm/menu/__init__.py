@@ -1,7 +1,5 @@
 import curses
-import os
 from curses import panel
-from pprint import pprint
 
 class CursesMenuPanel(object):
 
@@ -44,10 +42,12 @@ class CursesMenuPanel(object):
             key = self.window.getch()
 
             if key in [curses.KEY_ENTER, ord('\n')]:
-                if self.position == len(self.items)-1:
+                # Handle exit from menu
+                if self.position == len(self.items)-1 or str(self.items[self.position][1]) == "exit":
                     break
                 else:
-                    self.rootmenu.set_selection(self.items[self.position][1])
+                    if self.rootmenu.set_selection(self.items[self.position][1]):
+                        break
 
             elif key == curses.KEY_UP:
                 self.navigate(-1)
@@ -61,15 +61,18 @@ class CursesMenuPanel(object):
         curses.doupdate()
 
 class CursesMenu(object):
-    selection = None
-    submenus = {}
     def __init__(self, stdscreen, menudata=None):
+        self.selection = None
+        self.submenus = {}
         self.screen = stdscreen
         curses.curs_set(0)
-        self.process_menudata()
+	if menudata is not None:
+		self.menu = iter_menu(menudata=menudata, rootmenu=self)
+	else:
+	        self.menu = self.default_menu()
         self.menu.display()
 
-    def process_menudata(self):
+    def default_menu(self):
         submenu_items = [
                 ('beep', curses.beep),
                 ('flash', curses.flash),
@@ -85,42 +88,30 @@ class CursesMenu(object):
                 ('stringy', "stringgggg")
                 ]
         main_menu = CursesMenuPanel(items=main_menu_items, rootmenu=self)
-        self.menu = main_menu
+	return main_menu
 
     def set_selection(self, selection=None):
         if selection.__class__.__name__ == "CursesMenuPanel":
             self.selection = selection
             self.selection.display()
+            return False
         elif hasattr(selection, '__call__'):
             self.selection = selection()
+            return True
         else:
             self.selection = selection
+            return True
 
     def get_selection(self):
         return self.selection
-#self.selection
 
-menudata = {
-	"Main Menu": {
-		"beep": curses.beep,
-		"flash": curses.flash,
-		"print": ("print","some string"),
-		"Item One": "",
-		"Item Two": "item2",
-		"Submenu One": {
-			"Item One": "something",
-			"Item Two": ""
-		}
-	}
-}
-pprint(menudata)
 def iter_menu(menudata,rootmenu,path=""):
 	menu_items = []
 	for key, val in menudata.iteritems():
 		if hasattr(val, "__call__"):
 			menu_items.append([key,val])
 		elif isinstance(val, dict):
-			submenu_name = os.path.join(path,key)
+			submenu_name = "/".join(path,key)
 			rootmenu.submenus[submenu_name] = iter_menu(menudata=val, rootmenu=rootmenu, path=submenu_name)
 			menu_items.append([key,rootmenu.submenus[submenu_name]])
 		elif isinstance(val, list) or isinstance(val, tuple):
@@ -133,20 +124,10 @@ def iter_menu(menudata,rootmenu,path=""):
 
 
 class Menu(object):
-	def __init__(self, type="curses"):
-		print "Menu"
-		print type
+	def __init__(self, type="curses", menudata=None):
 		if type == "curses":
-			self.menu = curses.wrapper(CursesMenu)
-			pprint(dir(self.menu))
-			self.new_menu = iter_menu(menudata=menudata, rootmenu=self.menu)
-			self.new_menu.display()
+			self.menu = curses.wrapper(CursesMenu,menudata=menudata)
 
 	def get_selection(self):
 		if not self.menu is None:
 			return self.menu.get_selection()
-
-if __name__ == '__main__':
-	print "main"
-	menu = Menu()
-	print menu.get_selection()
