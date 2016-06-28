@@ -73,7 +73,7 @@ class ScriptConfig(object):
 			cfg_file = "_default"
 		if config is None:
 			config = self.config
-		cfg_path = os.path.join(self.core.interpolate(key="game_script_cfg_dir",data=self.config),"%s%s" % (cfg_file,".yaml"))
+		cfg_path = os.path.join(self.core.interpolate(key="script_game_cfg_dir",data=self.config),"%s%s" % (cfg_file,".yaml"))
 		if not os.path.isdir(os.path.dirname(cfg_path)):
 			os.makedirs(os.path.dirname(cfg_path))
 
@@ -82,4 +82,39 @@ class ScriptConfig(object):
 			conf = self.merge_gamedata(config=self.config,gamedata=self.gamedata.gamedata)
 			with open(cfg_path, 'w') as outfile:
 				outfile.write( yaml.dump(self.config, indent=4, width=120, default_flow_style=False) )
+
+
+""" This is not yet wired up, but the idea is to represent all the gamedata and config file contents inside a data structure
+"""
+class ConfigNode(object):
+	def __init__(self,name,desc=None):
+		self.name = name
+		self.desc = desc
+
+class ConfigValue(ConfigNode):
+	def __init__(self,name,desc=None,value=None,default=None):
+		ConfigNode.__init__(self,name,desc)
+		self.default = default
+		self.value = value
+
+class Setting(ConfigValue):
+	def __init__(self,name,desc=None,value=None,default=None,format=None,parm=None):
+		ConfigValue.__init__(self,name,desc,value,default)
+		self.format = format
+		self.parm = parm
+
+class ScriptAction(ConfigNode):
+	def __init__(self,name,desc=None,command=None,aliases=None):
+		ConfigNode.__init__(self,name,desc)
+		self.command = command
+		self.aliases = aliases
+
+class Parm(ConfigValue):
+	def __init__(self,name,desc=None,value=None,default=None):
+		ConfigValue.__init__(self,name,desc,value,default)
+
+class Dependency(ConfigNode):
+	def __init__(self,name,desc=None,checksum=None):
+		ConfigNode.__init__(self,name,desc)
+		self.checksum = checksum
 

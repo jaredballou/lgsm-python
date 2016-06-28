@@ -1,6 +1,6 @@
 import urllib2
 import os
-from lgsmcore.download import *
+from lgsm.utils.download import *
 import tarfile
 import zipfile
 import subprocess
@@ -18,7 +18,7 @@ class Steam(object):
 	def __init__(self, steamcmd_path=None, steamcmd_url=None, parent=None, steam_path=None, appid=None, steamcmd_options=None):
 		"""
 		steamcmd_install(steamcmd_path=None)
-	
+
 		Grabs the correct build of steamcmd for the platform and unzips it
 		"""
 		if not parent is None:
@@ -46,25 +46,25 @@ class Steam(object):
 	def extract_file(self,compressed_file, target_path):
 		"""
 		extract_file(compressed_file, target_path)
-	
+
 		extracts the compressed_file to target_path
 		"""
-	
+
 		if os.path.exists(compressed_file):
 			print "Extracting %s to %s\n" % (compressed_file, target_path)
-	
+
 			if zipfile.is_zipfile(compressed_file):
 				with zipfile.ZipFile(compressed_file, "r") as z:
 						z.extractall(path=target_path)
-	
+
 			if tarfile.is_tarfile(compressed_file):
 				tar = tarfile.open(compressed_file)
 				tar.extractall(path=target_path)
 				tar.close()
-	
+
 			print "Cleaning up\n"
 			os.remove(compressed_file)
-	
+
 			print "Done!\n"
 		else:
 			print "%s does not exist, cannot extract" % compressed_file
@@ -72,14 +72,14 @@ class Steam(object):
 	def steamcmd_install(self):
 		if os.path.exists("%s/steamcmd.sh" % self.steamcmd_path):
 			return
-	
+
 		if not os.path.exists(self.steamcmd_path):
 			print "%s does not exist, creating path before downloading steamcmd\n"\
 				% self.steamcmd_path
 			os.makedirs(self.steamcmd_path)
-	
+
 		steamcmd_tar = "%s/steamcmd.tar.gz" % self.steamcmd_path
-	
+
 		print "Grabbing steamcmd from %s. Saving to %s\n" % (steamcmd_url,steamcmd_tar)
 		dl_file = Download(steamcmd_url,steamcmd_tar)
 
@@ -96,7 +96,7 @@ class Steam(object):
 	def app_install(self, appid=None):
 		"""
 		app_install(appid=None)
-	
+
 		Executes the steamcmd script and begins downloading a dedicated server
 		"""
 		self.app_update(appid=appid)

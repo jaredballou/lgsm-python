@@ -1,19 +1,8 @@
-#!/usr/bin/env python
-
+""" Invoke LGSM from command line
+Example: python -m lgsm install
+"""
 import sys, os
-from pprint import pprint
-from glob import glob
-test_roots = set([os.path.dirname(os.path.realpath(__file__)),os.getcwd()])
-test_dirs = set([".local/lib/python*/site-packages", "lgsm/modules"])
-print test_roots
-print test_dirs
-for root in test_roots:
-	for dir in test_dirs:
-		for sp in glob(os.path.join(root,dir)):
-			#print(sp)
-			sys.path.insert(0, sp)
-
-from lgsmcore import *
+from lgsm import *
 #from steam import Steam
 
 #def do_steam(steamcmd_path="/home/jballou/games/steamcmd",steam_path="/home/jballou/games/serverfiles",appid=237410):
@@ -21,7 +10,7 @@ from lgsmcore import *
 #	steam.app_install(appid=appid)
 
 def do_lgsm(steamcmd_path="/home/jballou/games/steamcmd",appid=237410):
-	core = LGSMCore()
+	core = LGSM()
 	print "final config"
 	ic = core.interpolate(data=core.config)
 #core.interpolate_config()
