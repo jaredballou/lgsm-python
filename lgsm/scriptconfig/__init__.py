@@ -7,6 +7,7 @@ import logging
 import datetime
 import __main__ as main
 from pprint import pprint
+from lgsm.utils import *
 
 #logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -20,7 +21,8 @@ except ImportError:
 	from ordereddict import OrderedDict
 
 class ScriptConfig(object):
-	def __init__(self, core=None, game=None, game_instance=None):
+	def __init__(self, core=None, game=None, game_instance=None, create_configs=True):
+		self.create_configs = create_configs
 		if not core is None:
 			self.core = core
 			self.config = core.config
@@ -39,12 +41,13 @@ class ScriptConfig(object):
 			game = self.game
 		if game_instance is None:
 			game_instance = self.game_instance
-		#print self.config
-		#print game
-		#print game_instance
-		self.create_file(game=game,game_instance=game_instance,cfg_file="_default")
-		self.create_file(game=game,game_instance=game_instance,cfg_file="_common")
-		self.create_file(game=game,game_instance=game_instance,cfg_file=game_instance)
+
+		self.merge_gamedata(config=self.core.config,gamedata=self.core.gamedata.gamedata)
+
+		if self.create_configs:
+			self.create_file(game=game,game_instance=game_instance,cfg_file="_default")
+			self.create_file(game=game,game_instance=game_instance,cfg_file="_common")
+			self.create_file(game=game,game_instance=game_instance,cfg_file=game_instance)
 
 	def merge_gamedata(self,game=None,gamedata=None,game_instance=None,config=None):
 		if game is None:
@@ -55,16 +58,19 @@ class ScriptConfig(object):
 			gamedata = self.gamedata.gamedata
 		if config is None:
 			config = self.config
-		if ("settings" in gamedata.keys()):
-			for setting in gamedata["settings"].keys():
-				if "default" in gamedata["settings"][setting].keys():
-					config[setting] = gamedata["settings"][setting]["default"]
-				else:
-					if not setting in config.keys():
-						config[setting] = ""
+		try:
+			if ("settings" in gamedata.keys()):
+				for setting in gamedata["settings"].keys():
+					if "default" in gamedata["settings"][setting].keys():
+						config[setting] = gamedata["settings"][setting]["default"]
+					else:
+						if not setting in config.keys():
+							config[setting] = ""
+		except:
+			pass
 		return config
 
-	def create_file(self, game=None, game_instance=None, cfg_file=None, config=None):
+	def create_file(self, game=None, game_instance=None, cfg_file=None, config=None, cfg_path=None, force=False):
 		if game is None:
 			game = self.game
 		if game_instance is None:
@@ -73,17 +79,35 @@ class ScriptConfig(object):
 			cfg_file = "_default"
 		if config is None:
 			config = self.config
-		cfg_path = os.path.join(self.core.interpolate(key="script_game_cfg_dir",data=self.config),"%s%s" % (cfg_file,".yaml"))
-		if not os.path.isdir(os.path.dirname(cfg_path)):
-			os.makedirs(os.path.dirname(cfg_path))
+		cfg_yaml = yaml.dump(self.config, indent=4, width=120, default_flow_style=False)
+		# TODO: Make this append the commented default config?
+		if cfg_file != "_default":
+			cfg_yaml = "%s config. This will not be changed by the script, save all changes here" % cfg_file
+		if cfg_path is None:
+			cfg_path = os.path.join(self.core.interpolate(key="script_game_cfg_dir",data=self.config),"%s%s" % (cfg_file,".yaml"))
+		try:
+			if not os.path.isdir(os.path.dirname(cfg_path)):
+				os.makedirs(os.path.dirname(cfg_path))
+		except:
+			pass
+		if os.path.exists(cfg_path):
+			# Only make changes to an existing default config file
+			if cfg_file != "_default":
+				return
+			try:
+				with open(cfg_path, 'r') as ymlfile:
+					existing_cfg = yaml.load(ymlfile)
+				if (equal_dicts(self.config,existing_cfg,["date_string"])):
+					return
+			except:
+				print "error comparing configs! Bailing out!"
+				return
+		print "Creating %s" % cfg_path
+		with open(cfg_path, 'w') as outfile:
+			outfile.write(cfg_yaml)
 
-		if cfg_file == "_default":
-			print "Creating %s" % cfg_path
-			conf = self.merge_gamedata(config=self.config,gamedata=self.gamedata.gamedata)
-			with open(cfg_path, 'w') as outfile:
-				outfile.write( yaml.dump(self.config, indent=4, width=120, default_flow_style=False) )
 
-
+#date_string
 """ This is not yet wired up, but the idea is to represent all the gamedata and config file contents inside a data structure
 """
 class ConfigNode(object):
